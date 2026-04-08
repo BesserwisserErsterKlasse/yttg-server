@@ -1,0 +1,11 @@
+__pycache__
+
+.env
+.mypy_cache
+.venv
+
+configs/*.json
+session/*.session
+session/*.session-journal
+
+src/*.egg-info
