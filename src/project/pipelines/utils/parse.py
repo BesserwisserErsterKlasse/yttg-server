@@ -25,3 +25,9 @@ def parse_streams(message: PyrogramMessage) -> dict[Stream, tuple[int, int]]:
         for x, button_row in enumerate(message.reply_markup.inline_keyboard)
         for y, button in enumerate(button_row)
     }
+
+
+def parse_video_title(message: PyrogramMessage) -> str:
+    """Return a YouTube video title."""
+
+    return message.caption.split(sep='\n', maxsplit=1)[0][1:]
