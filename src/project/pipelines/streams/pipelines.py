@@ -42,3 +42,9 @@ async def get_streams(
             return None
         case OnLinkResponse.STREAMS:
             return parse_streams(chat[OnLinkResponse.STREAMS])
+
+
+async def select_stream(chat: AcquiredChat, stream_selector: tuple[int, int]) -> None:
+    """Select a YouTube video stream."""
+
+    await chat.click(OnLinkResponse.STREAMS, stream_selector)
