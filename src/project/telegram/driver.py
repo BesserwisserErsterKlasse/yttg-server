@@ -41,6 +41,7 @@ class YttgDriver(TelegramDriver):
             chat_acquisition_event=self.__chat_acquisition_events[chat_id],
             message_queue=self.__message_queues[chat_id],
             send_text_callback=self.__send_text(chat_id),
+            subscribe_callback=self.__subscribe(),
         )
 
     def __init__(
@@ -87,3 +88,9 @@ class YttgDriver(TelegramDriver):
             await self._client.send_message(chat_id=chat, text=text)
 
         return send_text
+
+    def __subscribe(self) -> Callable[[str], Awaitable[None]]:
+        async def subscribe(channel: str) -> None:
+            await self._client.join_chat(chat_id=channel)
+
+        return subscribe

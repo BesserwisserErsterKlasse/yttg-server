@@ -44,3 +44,14 @@ class NotSubscribedError(ProviderError):
         object.__setattr__(self, 'status', ResponseStatus.TELEGRAM_ERROR)
         object.__setattr__(self, 'message', YttgErrorMessage.NOT_SUBSCRIBED_ERROR)
         object.__setattr__(self, 'provider', provider)
+
+
+@dataclass(frozen=True, slots=True)
+class InvalidChannelHashError(YttgError):
+    channel: str
+    """Tag of an invalid channel."""
+
+    def __init__(self, channel: str) -> None:
+        object.__setattr__(self, 'status', ResponseStatus.TELEGRAM_ERROR)
+        object.__setattr__(self, 'message', YttgErrorMessage.INVALID_CHANNEL_HASH)
+        object.__setattr__(self, 'channel', channel)

@@ -6,6 +6,7 @@ from contextlib import suppress
 from dataclasses import dataclass
 from typing import Any, Self
 
+from pyrogram.errors import UserAlreadyParticipant
 from pyrogram.types import Message as PyrogramMessage
 
 from project.telegram.chat.expected import ExpectedMessage
@@ -16,8 +17,9 @@ from project.telegram.chat.ordered import OrderedMessage
 class AcquiredChat:
     __chat_acquisition_event: Event
     __message_queue: PriorityQueue[OrderedMessage]
-    __send_text_callback: Callable[[str], Awaitable[None]]
     __messages: dict[str, PyrogramMessage]
+    __send_text_callback: Callable[[str], Awaitable[None]]
+    __subscribe_callback: Callable[[str], Awaitable[None]]
 
     async def wait_for[NameT: str](
         self,
@@ -70,16 +72,24 @@ class AcquiredChat:
         with suppress(TimeoutError):
             await self.__messages[message_name].click(*selector, timeout=3)
 
+    async def subscribe(self, channel_tag: str) -> None:
+        """Subscribe to a specified Telegram channel."""
+
+        with suppress(UserAlreadyParticipant):
+            await self.__subscribe_callback(channel_tag)
+
     def __init__(
         self,
         chat_acquisition_event: Event,
         message_queue: PriorityQueue[OrderedMessage],
         send_text_callback: Callable[[str], Awaitable[None]],
+        subscribe_callback: Callable[[str], Awaitable[None]],
     ) -> None:
         self.__chat_acquisition_event = chat_acquisition_event
         self.__message_queue = message_queue
-        self.__send_text_callback = send_text_callback
         self.__messages = {}
+        self.__send_text_callback = send_text_callback
+        self.__subscribe_callback = subscribe_callback
         while not self.__message_queue.empty():
             self.__message_queue.get_nowait()
 

@@ -8,13 +8,23 @@ from asyncio import run
 from pathlib import Path
 
 from project.globalobjects import server, tg
-from project.pipelines import download_video, get_streams, select_stream
+from project.pipelines import (
+    download_video,
+    get_channels,
+    get_streams,
+    select_stream,
+    subscribe,
+)
 from project.server.types import (
+    ChannelInfoRequest,
+    ChannelInfoResponse,
     DownloadRequest,
     DownloadResponse,
     Stream,
     StreamInfoRequest,
     StreamInfoResponse,
+    SubscribeRequest,
+    SubscribeResponse,
     UnmatchedRequestError,
     YttgRequest,
 )
@@ -43,6 +53,26 @@ async def download_handler(request: DownloadRequest) -> None:
         if savepath is None:
             return None
         await server.send(request.peer_id, DownloadResponse(savepath=savepath))
+
+
+@server.on_request(ChannelInfoRequest)
+async def channel_info_request_handler(request: ChannelInfoRequest) -> None:
+    async with tg.acquire(request.provider) as chat:
+        channels: list[str] = await get_channels(chat)
+        await server.send(
+            peer_id=request.peer_id,
+            response=ChannelInfoResponse(channels),
+        )
+
+
+@server.on_request(SubscribeRequest)
+async def subscribe_request_handler(request: SubscribeRequest) -> None:
+    async with tg.acquire(request.provider) as chat:
+        subscribed: list[str] = await subscribe(chat, request)
+        await server.send(
+            peer_id=request.peer_id,
+            response=SubscribeResponse(subscribed),
+        )
 
 
 @server.on_unmatched_request
