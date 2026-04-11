@@ -9,6 +9,7 @@ from project.server.types.response.enums import ResponseStatus, YttgErrorMessage
 from project.server.types.response.errors import (
     IllFormedLinkError,
     InvalidChannelHashError,
+    InvalidLanguageError,
     NoResultFoundError,
     NotSubscribedError,
     UnmatchedRequestError,
@@ -21,6 +22,7 @@ __all__: list[str] = [
     'DownloadResponse',
     'IllFormedLinkError',
     'InvalidChannelHashError',
+    'InvalidLanguageError',
     'LinkError',
     'ProviderError',
     'NoResultFoundError',

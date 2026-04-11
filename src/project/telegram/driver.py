@@ -7,6 +7,7 @@ from typing import override
 from pyrogram.client import Client as PyrogramClient
 from pyrogram.enums import ParseMode
 from pyrogram.filters import bot, private
+from pyrogram.handlers.edited_message_handler import EditedMessageHandler
 from pyrogram.handlers.message_handler import MessageHandler
 from pyrogram.types import Message as PyrogramMessage
 
@@ -26,6 +27,11 @@ class YttgDriver(TelegramDriver):
         await add_handler(
             client=self._client,
             handler=MessageHandler(self.__on_message, bot & private),
+            group=0,
+        )
+        await add_handler(
+            client=self._client,
+            handler=EditedMessageHandler(self.__on_message, bot & private),
             group=0,
         )
 

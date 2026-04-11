@@ -55,3 +55,14 @@ class InvalidChannelHashError(YttgError):
         object.__setattr__(self, 'status', ResponseStatus.TELEGRAM_ERROR)
         object.__setattr__(self, 'message', YttgErrorMessage.INVALID_CHANNEL_HASH)
         object.__setattr__(self, 'channel', channel)
+
+
+@dataclass(frozen=True, slots=True)
+class InvalidLanguageError(YttgError):
+    language: str
+    """Chosen YouTube video language."""
+
+    def __init__(self, language: str) -> None:
+        object.__setattr__(self, 'status', ResponseStatus.CLIENT_ERROR)
+        object.__setattr__(self, 'message', YttgErrorMessage.INVALID_LANGUAGE)
+        object.__setattr__(self, 'language', language)
