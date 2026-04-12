@@ -7,6 +7,7 @@ from project.server.types.response.success.stream import (
     DownloadResponse,
     StreamInfoResponse,
 )
+from project.server.types.response.success.thumbnail import ThumbnailResponse
 
 __all__ = [
     'ChannelInfoResponse',
@@ -14,4 +15,5 @@ __all__ = [
     'SearchResponse',
     'DownloadResponse',
     'StreamInfoResponse',
+    'ThumbnailResponse',
 ]

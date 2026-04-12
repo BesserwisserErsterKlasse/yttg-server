@@ -3,6 +3,7 @@ from project.server.types.request.channel import ChannelInfoRequest, SubscribeRe
 from project.server.types.request.enums import Stream, YttgCommand
 from project.server.types.request.search import SearchRequest
 from project.server.types.request.stream import DownloadRequest, StreamInfoRequest
+from project.server.types.request.thumbnail import ThumbnailRequest
 
 __all__: list[str] = [
     'YttgRequest',
@@ -13,4 +14,5 @@ __all__: list[str] = [
     'SearchRequest',
     'DownloadRequest',
     'StreamInfoRequest',
+    'ThumbnailRequest',
 ]

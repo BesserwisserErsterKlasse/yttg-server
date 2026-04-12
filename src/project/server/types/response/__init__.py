@@ -14,6 +14,7 @@ from project.server.types.response.success import (
     SearchResponse,
     StreamInfoResponse,
     SubscribeResponse,
+    ThumbnailResponse,
 )
 
 __all__: list[str] = [
@@ -32,4 +33,5 @@ __all__: list[str] = [
     'SearchResponse',
     'StreamInfoResponse',
     'SubscribeResponse',
+    'ThumbnailResponse',
 ]

@@ -12,6 +12,7 @@ from project.pipelines import (
     download_video,
     get_channels,
     get_streams,
+    get_thumbnail,
     select_stream,
     subscribe,
 )
@@ -27,6 +28,8 @@ from project.server.types import (
     StreamInfoResponse,
     SubscribeRequest,
     SubscribeResponse,
+    ThumbnailRequest,
+    ThumbnailResponse,
     UnmatchedRequestError,
     YttgRequest,
 )
@@ -85,6 +88,16 @@ async def search_request_handler(request: SearchRequest) -> None:
         peer_id=request.peer_id,
         response=SearchResponse(offset=result.offset, videos=result.videos),
     )
+
+
+@server.on_request(ThumbnailRequest)
+async def thumbnail_request_handler(request: ThumbnailRequest) -> None:
+    async with tg.acquire(request.provider) as chat:
+        await get_thumbnail(chat, request)
+        await server.send(
+            peer_id=request.peer_id,
+            response=ThumbnailResponse(request.savepath),
+        )
 
 
 @server.on_unmatched_request
