@@ -8,12 +8,15 @@ from project.pipelines.constraints import (
 from project.pipelines.streams.namespace import OnLinkResponse
 from project.pipelines.utils import parse_streams
 from project.server.types import (
+    DownloadRequest,
     IllFormedLinkError,
-    LinkRequest,
     NoResultFoundError,
     Stream,
+    StreamInfoRequest,
 )
 from project.telegram import AcquiredChat, ExpectedMessage
+
+type LinkRequest = DownloadRequest | StreamInfoRequest
 
 
 async def get_streams(

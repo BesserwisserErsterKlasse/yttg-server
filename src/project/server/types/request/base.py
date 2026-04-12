@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC
 from dataclasses import dataclass
 from typing import ClassVar
 from uuid import UUID
@@ -7,7 +8,7 @@ from uuid import UUID
 from project.server.types.request.enums import YttgCommand
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class YttgRequest:
     command: ClassVar[YttgCommand | None] = None
     """Command the request was constructed with."""
@@ -33,12 +34,12 @@ class YttgRequest:
 
 
 @dataclass(frozen=True)
-class ProviderRequest(YttgRequest):
-    provider: str
-    """Telegram tag of the bot which shall handle the request."""
+class LinkRequestMixin(ABC):
+    link: str
+    """Link to a YouTube video."""
 
 
 @dataclass(frozen=True)
-class LinkRequest(YttgRequest):
-    link: str
-    """Link to a YouTube video."""
+class ProviderRequestMixin(ABC):
+    provider: str
+    """Telegram tag of the bot which shall handle the request."""

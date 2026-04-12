@@ -1,26 +1,28 @@
-from __future__ import annotations
-
 from dataclasses import dataclass
 from pathlib import Path
 
-from project.server.types.request.base import LinkRequest, ProviderRequest, YttgRequest
+from project.server.types.request.base import (
+    LinkRequestMixin,
+    ProviderRequestMixin,
+    YttgRequest,
+)
 from project.server.types.request.enums import Stream, YttgCommand
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class StreamInfoRequest(
-    LinkRequest,
-    ProviderRequest,
+    LinkRequestMixin,
+    ProviderRequestMixin,
     YttgRequest,
     command=YttgCommand.GET_STREAMS,
 ):
     pass
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class DownloadRequest(
-    LinkRequest,
-    ProviderRequest,
+    LinkRequestMixin,
+    ProviderRequestMixin,
     YttgRequest,
     command=YttgCommand.DOWNLOAD,
 ):

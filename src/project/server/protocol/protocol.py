@@ -5,9 +5,13 @@ from typing import Any, override
 from modules.tcp import TcpProtocol
 from modules.tcp.types.peer import Peer
 from project.server.protocol.converter import converter
-from project.server.types.request import YttgCommand, YttgRequest
-from project.server.types.response import YttgResponse
-from project.server.types.session import YttgSession
+from project.server.types import (
+    YttgCommand,
+    YttgError,
+    YttgRequest,
+    YttgResponse,
+    YttgSession,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -30,9 +34,12 @@ class YttgProtocol(TcpProtocol[YttgRequest, YttgResponse, YttgSession]):
 
     @override
     async def send(self, session: YttgSession, response: YttgResponse) -> None:
-        raw_response: bytes = dumps(
-            converter.unstructure(response), sort_keys=True
-        ).encode()
+        serialized_response: dict[str, object] = converter.unstructure(response)
+        serialized_response['response-kind'] = response.kind
+        serialized_response['status'] = response.status
+        if isinstance(response, YttgError):
+            serialized_response['message'] = response.message
+        raw_response: bytes = dumps(serialized_response, sort_keys=True).encode()
         header: bytes = f'{len(raw_response):0>16}'.encode()
         session.peer.writer.write(header + raw_response)
         await session.peer.writer.drain()

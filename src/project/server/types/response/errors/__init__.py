@@ -1,17 +1,19 @@
-from project.server.types.response.errors.errors import (
+from project.server.types.response.errors.client import (
     IllFormedLinkError,
-    InvalidChannelHashError,
     InvalidLanguageError,
     NoResultFoundError,
+)
+from project.server.types.response.errors.internal import UnmatchedRequestError
+from project.server.types.response.errors.telegram import (
+    InvalidChannelHashError,
     NotSubscribedError,
-    UnmatchedRequestError,
 )
 
 __all__: list[str] = [
     'IllFormedLinkError',
-    'InvalidChannelHashError',
     'InvalidLanguageError',
     'NoResultFoundError',
-    'NotSubscribedError',
     'UnmatchedRequestError',
+    'InvalidChannelHashError',
+    'NotSubscribedError',
 ]

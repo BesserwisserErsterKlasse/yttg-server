@@ -4,7 +4,7 @@ from project.server.types.request.base import YttgRequest
 from project.server.types.request.enums import YttgCommand
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, slots=True)
 class SearchRequest(YttgRequest, command=YttgCommand.SEARCH):
     query: str
     """Search term used to retrieve matching YouTube videos."""

@@ -1,11 +1,11 @@
 from project.server.types.request import (
     ChannelInfoRequest,
     DownloadRequest,
-    LinkRequest,
     SearchRequest,
     Stream,
     StreamInfoRequest,
     SubscribeRequest,
+    YttgCommand,
     YttgRequest,
 )
 from project.server.types.response import (
@@ -21,6 +21,7 @@ from project.server.types.response import (
     StreamInfoResponse,
     SubscribeResponse,
     UnmatchedRequestError,
+    YttgError,
     YttgErrorMessage,
     YttgResponse,
 )
@@ -29,11 +30,11 @@ from project.server.types.session import YttgSession
 __all__ = [
     'ChannelInfoRequest',
     'DownloadRequest',
-    'LinkRequest',
     'SearchRequest',
     'Stream',
     'StreamInfoRequest',
     'SubscribeRequest',
+    'YttgCommand',
     'YttgRequest',
     'ChannelInfoResponse',
     'DownloadResponse',
@@ -47,6 +48,7 @@ __all__ = [
     'StreamInfoResponse',
     'SubscribeResponse',
     'UnmatchedRequestError',
+    'YttgError',
     'YttgErrorMessage',
     'YttgResponse',
     'YttgSession',

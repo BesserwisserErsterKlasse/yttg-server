@@ -1,11 +1,11 @@
-from enum import IntEnum, StrEnum
+from enum import StrEnum
 
 
-class ResponseStatus(IntEnum):
-    SUCCESS = 0
-    TELEGRAM_ERROR = 1
-    INTERNAL_ERROR = 2
-    CLIENT_ERROR = 3
+class ResponseStatus(StrEnum):
+    SUCCESS = 'success'
+    CLIENT_ERROR = 'client-error'
+    INTERNAL_ERROR = 'internal-error'
+    TELEGRAM_ERROR = 'telegram-error'
 
 
 class YttgErrorMessage(StrEnum):
