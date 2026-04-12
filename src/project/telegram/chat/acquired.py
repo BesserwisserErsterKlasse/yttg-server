@@ -11,6 +11,7 @@ from pyrogram.types import Message as PyrogramMessage
 
 from project.telegram.chat.expected import ExpectedMessage
 from project.telegram.chat.ordered import OrderedMessage
+from project.telegram.retry import retry
 
 
 @dataclass(slots=True)
@@ -66,6 +67,7 @@ class AcquiredChat:
 
         await self.__send_text_callback(text)
 
+    @retry
     async def click(self, message_name: str, selector: tuple[int, int]) -> None:
         """Trigger a click on a selected button within a specified message."""
 

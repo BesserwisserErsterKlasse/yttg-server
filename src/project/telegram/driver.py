@@ -14,6 +14,7 @@ from pyrogram.types import Message as PyrogramMessage
 from modules.telegram import Proxy, TelegramDriver
 from modules.telegram.handler import add_handler
 from project.telegram.chat import AcquiredChat, OrderedMessage
+from project.telegram.retry import retry
 
 
 @dataclass(slots=True)
@@ -90,12 +91,14 @@ class YttgDriver(TelegramDriver):
             self.__message_queues[chat_id].put_nowait(OrderedMessage(message))
 
     def __send_text(self, chat: str) -> Callable[[str], Awaitable[None]]:
+        @retry
         async def send_text(text: str) -> None:
             await self._client.send_message(chat_id=chat, text=text)
 
         return send_text
 
     def __subscribe(self) -> Callable[[str], Awaitable[None]]:
+        @retry
         async def subscribe(channel: str) -> None:
             await self._client.join_chat(chat_id=channel)
 
