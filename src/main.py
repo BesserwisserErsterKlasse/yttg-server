@@ -20,6 +20,8 @@ from project.server.types import (
     ChannelInfoResponse,
     DownloadRequest,
     DownloadResponse,
+    SearchRequest,
+    SearchResponse,
     Stream,
     StreamInfoRequest,
     StreamInfoResponse,
@@ -28,6 +30,7 @@ from project.server.types import (
     UnmatchedRequestError,
     YttgRequest,
 )
+from project.telegram.types import SearchResult
 
 
 @server.on_request(StreamInfoRequest)
@@ -73,6 +76,15 @@ async def subscribe_request_handler(request: SubscribeRequest) -> None:
             peer_id=request.peer_id,
             response=SubscribeResponse(subscribed),
         )
+
+
+@server.on_request(SearchRequest)
+async def search_request_handler(request: SearchRequest) -> None:
+    result: SearchResult = await tg.search(request.query, request.offset)
+    await server.send(
+        peer_id=request.peer_id,
+        response=SearchResponse(offset=result.offset, videos=result.videos),
+    )
 
 
 @server.on_unmatched_request

@@ -17,4 +17,5 @@ class YttgCommand(StrEnum):
     DOWNLOAD = 'download'
     GET_STREAMS = 'get-streams'
     GET_CHANNELS = 'get-channels'
+    SEARCH = 'search'
     SUBSCRIBE = 'subscribe'

@@ -9,12 +9,15 @@ from pyrogram.enums import ParseMode
 from pyrogram.filters import bot, private
 from pyrogram.handlers.edited_message_handler import EditedMessageHandler
 from pyrogram.handlers.message_handler import MessageHandler
+from pyrogram.raw.base.messages.bot_results import BotResults
+from pyrogram.raw.types.bot_inline_result import BotInlineResult
 from pyrogram.types import Message as PyrogramMessage
 
 from modules.telegram import Proxy, TelegramDriver
 from modules.telegram.handler import add_handler
-from project.telegram.chat import AcquiredChat, OrderedMessage
-from project.telegram.retry import retry
+from project.telegram.chat import AcquiredChat
+from project.telegram.types import OrderedMessage, SearchResult, VideoResult
+from project.telegram.utils import retry
 
 
 @dataclass(slots=True)
@@ -49,6 +52,34 @@ class YttgDriver(TelegramDriver):
             message_queue=self.__message_queues[chat_id],
             send_text_callback=self.__send_text(chat_id),
             subscribe_callback=self.__subscribe(),
+        )
+
+    async def search(self, query: str, offset: str | None = None) -> SearchResult:
+        results: BotResults = await self._client.get_inline_bot_results(
+            bot='vid',
+            query=query.strip(),
+            offset=(offset if offset is not None else str()),
+        )
+        videos: list[BotInlineResult] = getattr(results, 'results')
+        return SearchResult(
+            offset=getattr(results, 'next_offset', None),
+            videos=[
+                VideoResult(
+                    link=f'https://www.youtube.com/watch?v={video.id}',
+                    thumbnail_link=getattr(video.thumb, 'url'),
+                    duration=getattr(
+                        getattr(video.content, 'attributes')[0], 'duration'
+                    ),
+                    title=video.title,
+                    views=(
+                        video.description.split(sep=' ', maxsplit=1)[0]
+                        if video.description is not None
+                        else None
+                    ),
+                )
+                for video in videos
+                if video.title is not None
+            ],
         )
 
     def __init__(

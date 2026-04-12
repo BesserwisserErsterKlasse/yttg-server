@@ -1,8 +1,12 @@
 from dataclasses import dataclass
 
 from project.server.types.request import YttgRequest
-from project.server.types.response.base import LinkError, ProviderError, YttgError
+from project.server.types.response.base import YttgError
 from project.server.types.response.enums import ResponseStatus, YttgErrorMessage
+from project.server.types.response.errors.mixins import (
+    LinkErrorMixin,
+    ProviderErrorMixin,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -17,7 +21,7 @@ class UnmatchedRequestError(YttgError):
 
 
 @dataclass(frozen=True, slots=True)
-class IllFormedLinkError(LinkError):
+class IllFormedLinkError(LinkErrorMixin):
     """Not a valid YouTube link."""
 
     def __init__(self, link: str) -> None:
@@ -27,7 +31,7 @@ class IllFormedLinkError(LinkError):
 
 
 @dataclass(frozen=True, slots=True)
-class NoResultFoundError(LinkError):
+class NoResultFoundError(LinkErrorMixin):
     """A valid YouTube link that does not correspond to any video."""
 
     def __init__(self, link: str) -> None:
@@ -37,7 +41,7 @@ class NoResultFoundError(LinkError):
 
 
 @dataclass(frozen=True, slots=True)
-class NotSubscribedError(ProviderError):
+class NotSubscribedError(ProviderErrorMixin):
     """Telegram user not subscribed to channels required by the provider."""
 
     def __init__(self, provider: str) -> None:

@@ -14,15 +14,3 @@ class YttgResponse(ABC):
 class YttgError(YttgResponse, ABC):
     message: YttgErrorMessage
     """Response error message."""
-
-
-@dataclass(frozen=True, slots=True)
-class LinkError(YttgError, ABC):
-    link: str
-    """Link to the YouTube video."""
-
-
-@dataclass(frozen=True, slots=True)
-class ProviderError(YttgError):
-    provider: str
-    """Tag of the telegram bot that handles the request."""

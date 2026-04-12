@@ -9,9 +9,8 @@ from typing import Any, Self
 from pyrogram.errors import UserAlreadyParticipant
 from pyrogram.types import Message as PyrogramMessage
 
-from project.telegram.chat.expected import ExpectedMessage
-from project.telegram.chat.ordered import OrderedMessage
-from project.telegram.retry import retry
+from project.telegram.types import ExpectedMessage, OrderedMessage
+from project.telegram.utils import retry
 
 
 @dataclass(slots=True)

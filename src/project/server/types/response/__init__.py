@@ -1,10 +1,4 @@
-from project.server.types.response.base import (
-    LinkError,
-    ProviderError,
-    YttgError,
-    YttgResponse,
-)
-from project.server.types.response.channel import ChannelInfoResponse, SubscribeResponse
+from project.server.types.response.base import YttgError, YttgResponse
 from project.server.types.response.enums import ResponseStatus, YttgErrorMessage
 from project.server.types.response.errors import (
     IllFormedLinkError,
@@ -14,23 +8,28 @@ from project.server.types.response.errors import (
     NotSubscribedError,
     UnmatchedRequestError,
 )
-from project.server.types.response.stream import DownloadResponse, StreamInfoResponse
+from project.server.types.response.success import (
+    ChannelInfoResponse,
+    DownloadResponse,
+    SearchResponse,
+    StreamInfoResponse,
+    SubscribeResponse,
+)
 
 __all__: list[str] = [
+    'YttgError',
+    'YttgResponse',
     'ResponseStatus',
     'YttgErrorMessage',
-    'DownloadResponse',
     'IllFormedLinkError',
     'InvalidChannelHashError',
     'InvalidLanguageError',
-    'LinkError',
-    'ProviderError',
     'NoResultFoundError',
     'NotSubscribedError',
-    'StreamInfoResponse',
     'UnmatchedRequestError',
-    'YttgError',
-    'YttgResponse',
     'ChannelInfoResponse',
+    'DownloadResponse',
+    'SearchResponse',
+    'StreamInfoResponse',
     'SubscribeResponse',
 ]
