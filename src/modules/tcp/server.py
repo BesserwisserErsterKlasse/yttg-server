@@ -5,6 +5,7 @@ from asyncio import (
     StreamReader,
     StreamWriter,
 )
+from contextlib import suppress
 from dataclasses import dataclass
 from typing import Any, NoReturn
 from uuid import UUID
@@ -58,12 +59,13 @@ class TcpServer[Request: RequestProtocol, Response, Session: SessionProtocol]:
         self.__routes = []
 
     async def __receive(self, session: Session) -> None:
-        while True:
-            request: Request = await self.__protocol.receive(session)
-            for constraint, handler in self.__routes:
-                if constraint(request):
-                    await handler(request)
-                    break
+        with suppress(Exception):
+            while True:
+                request: Request = await self.__protocol.receive(session)
+                for constraint, handler in self.__routes:
+                    if constraint(request):
+                        await handler(request)
+                        break
 
     async def __accept(self, reader: StreamReader, writer: StreamWriter) -> None:
         async with self.__semaphore:
@@ -76,4 +78,5 @@ class TcpServer[Request: RequestProtocol, Response, Session: SessionProtocol]:
             finally:
                 self.__sessions.pop(session.id, None)
                 writer.close()
-                await writer.wait_closed()
+                with suppress(ConnectionError):
+                    await writer.wait_closed()
