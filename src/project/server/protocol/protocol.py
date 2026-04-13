@@ -16,7 +16,12 @@ from project.server.types import (
 
 @dataclass(frozen=True, slots=True)
 class YttgProtocol(TcpProtocol[YttgRequest, YttgResponse, YttgSession]):
-    header_size: int
+    __header_size: int
+
+    def __init__(self, header_size: int) -> None:
+        object.__setattr__(
+            self, f'_{self.__class__.__name__}__header_size', header_size
+        )
 
     @override
     async def create_session(self, peer: Peer, address: tuple[str, int]) -> Any:
@@ -24,9 +29,9 @@ class YttgProtocol(TcpProtocol[YttgRequest, YttgResponse, YttgSession]):
 
     @override
     async def receive(self, session: YttgSession) -> YttgRequest:
-        header: bytes = await session.peer.reader.readexactly(self.header_size)
-        body: bytes = await session.peer.reader.readexactly(int(header))
-        raw_command, raw_request = body.split(sep=b'#', maxsplit=1)
+        header: bytes = await session.peer.reader.readexactly(self.__header_size)
+        raw_body: bytes = await session.peer.reader.readexactly(int(header))
+        raw_command, raw_request = raw_body.split(sep=b'#', maxsplit=1)
         return converter.structure(
             obj=(loads(raw_request) | {'peer_id': session.id}),
             cl=YttgRequest.get_factory(YttgCommand(raw_command.decode())),
@@ -34,12 +39,12 @@ class YttgProtocol(TcpProtocol[YttgRequest, YttgResponse, YttgSession]):
 
     @override
     async def send(self, session: YttgSession, response: YttgResponse) -> None:
-        serialized_response: dict[str, object] = converter.unstructure(response)
-        serialized_response['response-kind'] = response.kind
-        serialized_response['status'] = response.status
+        unstructured_response: dict[str, object] = converter.unstructure(response)
+        unstructured_response['response-kind'] = response.kind
+        unstructured_response['status'] = response.status
         if isinstance(response, YttgError):
-            serialized_response['message'] = response.message
-        raw_response: bytes = dumps(serialized_response, sort_keys=True).encode()
-        header: bytes = f'{len(raw_response):0>16}'.encode()
+            unstructured_response['message'] = response.message
+        raw_response: bytes = dumps(unstructured_response, sort_keys=True).encode()
+        header: bytes = f'{len(raw_response):0>{self.__header_size}}'.encode()
         session.peer.writer.write(header + raw_response)
         await session.peer.writer.drain()
