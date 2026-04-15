@@ -101,6 +101,18 @@ On first startup, `yttg-server` will prompt you to authorize via QR code and ent
 
 **Note:** A session file will be created locally to persist authentication
 
+## Configuration
+
+### Cryptographic Standard
+
+Select the cryptographic standardused to establish a secure TCP connection via the `CRYPTO__ML_KEM` environment variable
+
+```env
+CRYPTO__ML_KEM="512"
+```
+
+Supported values are `512` *(default)*, `768` and `1024`
+
 ## License
 
 yttg-server is a free, open-source software distributed under the [AGPLv3 License](LICENSE.txt)
