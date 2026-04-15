@@ -31,5 +31,5 @@ class NoResultFoundError(
 class InvalidLanguageError(ClientError, message=YttgErrorMessage.INVALID_LANGUAGE):
     """Requested video has no audio in the provided language."""
 
-    language: str
+    language: str | None
     """Chosen YouTube video language code."""

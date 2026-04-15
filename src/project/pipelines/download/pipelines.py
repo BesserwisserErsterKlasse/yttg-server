@@ -38,8 +38,10 @@ async def download_video(chat: AcquiredChat, request: DownloadRequest) -> Path |
             languages: dict[str, tuple[int, int]] = parse_languages(
                 chat[OnStreamSelectionResponse.LANGUAGES_MESSAGE]
             )
-            language_selector: tuple[int, int] | None = languages.get(request.language)
-            if language_selector is None:
+            if (
+                request.language is None
+                or (language_selector := languages.get(request.language)) is None
+            ):
                 await server.send(
                     peer_id=request.peer_id,
                     response=InvalidLanguageError(language=request.language),

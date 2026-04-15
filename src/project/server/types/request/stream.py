@@ -29,13 +29,13 @@ class DownloadRequest(
     stream: Stream
     """YouTube stream to download."""
 
-    language: str
-    """Preffered language of the audio."""
-
     folder: Path
     """Folder where to save the file."""
 
-    name: str = '{title}'
+    language: str | None
+    """Preffered language of the audio."""
+
+    name: str
     """Local name of the media file."""
 
     def get_savepath(self, title: str) -> Path:
