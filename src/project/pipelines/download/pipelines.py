@@ -2,6 +2,7 @@ from pathlib import Path
 
 from project.globalobjects import server
 from project.pipelines.constraints import audio, has_languages, photo, text, video
+from project.pipelines.download.callback import create_downloading_progress_callback
 from project.pipelines.download.namespace import OnStreamSelectionResponse
 from project.pipelines.utils import parse_languages, parse_video_title
 from project.server.types import (
@@ -59,5 +60,11 @@ async def download_video(chat: AcquiredChat, request: DownloadRequest) -> Path |
             )
     video_title: str = parse_video_title(chat[OnStreamSelectionResponse.MEDIA_MESSAGE])
     savepath: Path = request.get_savepath(title=video_title)
-    await chat[OnStreamSelectionResponse.MEDIA_MESSAGE].download(str(savepath))
+    await chat[OnStreamSelectionResponse.MEDIA_MESSAGE].download(
+        file_name=str(savepath),
+        progress=create_downloading_progress_callback(
+            loop=chat[OnStreamSelectionResponse.MEDIA_MESSAGE]._client.loop,
+            peer_id=request.peer_id,
+        ),
+    )
     return savepath

@@ -10,7 +10,9 @@ from project.server.types.request import (
     YttgRequest,
 )
 from project.server.types.response import (
+    BackgroundResponse,
     ChannelInfoResponse,
+    DownloadProgressResponse,
     DownloadResponse,
     IllFormedLinkError,
     InvalidChannelHashError,
@@ -39,7 +41,9 @@ __all__ = [
     'ThumbnailRequest',
     'YttgCommand',
     'YttgRequest',
+    'BackgroundResponse',
     'ChannelInfoResponse',
+    'DownloadProgressResponse',
     'DownloadResponse',
     'IllFormedLinkError',
     'InvalidChannelHashError',

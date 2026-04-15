@@ -1,3 +1,7 @@
+from project.server.types.response.background import (
+    BackgroundResponse,
+    DownloadProgressResponse,
+)
 from project.server.types.response.base import YttgError, YttgResponse
 from project.server.types.response.enums import ResponseStatus, YttgErrorMessage
 from project.server.types.response.errors import (
@@ -18,6 +22,8 @@ from project.server.types.response.success import (
 )
 
 __all__: list[str] = [
+    'BackgroundResponse',
+    'DownloadProgressResponse',
     'YttgError',
     'YttgResponse',
     'ResponseStatus',

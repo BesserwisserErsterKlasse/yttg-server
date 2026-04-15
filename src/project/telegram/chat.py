@@ -67,11 +67,18 @@ class AcquiredChat:
         await self.__send_text_callback(text)
 
     @retry
-    async def click(self, message_name: str, selector: tuple[int, int]) -> None:
+    async def click(
+        self,
+        message_name: str,
+        selector: tuple[int, int],
+        delay: float | None = 1.0,
+    ) -> None:
         """Trigger a click on a selected button within a specified message."""
 
         with suppress(TimeoutError):
             await self.__messages[message_name].click(*selector, timeout=3)
+        if delay is not None:
+            await asleep(delay)
 
     async def subscribe(self, channel_tag: str) -> None:
         """Subscribe to a specified Telegram channel."""
