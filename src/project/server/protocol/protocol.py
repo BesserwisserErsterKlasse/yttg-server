@@ -6,8 +6,8 @@ from os import urandom
 from struct import pack, unpack
 from typing import Final, override
 
-from pqcrypto.kem.ml_kem_1024 import encrypt  # type: ignore[import-untyped]
-
+# isort: off
+from env import env
 from modules.tcp import TcpProtocol
 from modules.tcp.types.peer import Peer
 from project.server.protocol.converter import converter
@@ -27,6 +27,16 @@ from project.server.types import (
     YttgResponse,
     YttgSession,
 )
+
+match env.crypto.ml_kem:
+    case 512:
+        from pqcrypto.kem.ml_kem_512 import encrypt  # type: ignore[import-untyped]
+    case 768:
+        from pqcrypto.kem.ml_kem_768 import encrypt  # type: ignore[import-untyped]
+    case 1024:
+        from pqcrypto.kem.ml_kem_1024 import encrypt  # type: ignore[import-untyped]
+# isort: on
+
 
 PAYLOAD_SLICE: Final[slice] = slice(None, -32, None)
 MAC_SLICE: Final[slice] = slice(-32, None, None)

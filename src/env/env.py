@@ -1,7 +1,12 @@
-from typing import ClassVar, Final
+from typing import Annotated, ClassVar, Final, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, BeforeValidator, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+type ML_KEM = Annotated[
+    Literal[512, 768, 1024],
+    BeforeValidator(lambda v: int(v) if isinstance(v, str) else v),
+]
 
 
 class TelegramSettings(BaseModel):
@@ -15,6 +20,9 @@ class TelegramSettings(BaseModel):
 class CryptoSettings(BaseModel):
     pre_shared_secret: bytes
     """Pre-shared secret for public key exchange."""
+
+    ml_kem: ML_KEM = Field(default=512)
+    """MK-KEM standard."""
 
 
 class Env(BaseSettings):
