@@ -12,8 +12,14 @@ class TelegramSettings(BaseModel):
     """Telegram app API hash."""
 
 
+class CryptoSettings(BaseModel):
+    pre_shared_secret: bytes
+    """Pre-shared secret for public key exchange."""
+
+
 class Env(BaseSettings):
     telegram: TelegramSettings
+    crypto: CryptoSettings
 
     model_config: ClassVar[SettingsConfigDict] = SettingsConfigDict(
         env_file='.env',

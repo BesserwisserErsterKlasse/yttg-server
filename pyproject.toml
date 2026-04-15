@@ -3,7 +3,14 @@ name = "yttg-server"
 dynamic = ["version"]
 description = "Server side for yttg utility"
 authors = [{ name = "Emelianov Artem", email = "polyfoam3758@proton.me" }]
-dependencies = ["Pyrogram", "qrcode", "pydantic-settings", "cattrs"]
+dependencies = [
+    "Pyrogram",
+    "qrcode",
+    "pydantic-settings",
+    "cattrs",
+    "pyaes",
+    "pqcrypto",
+]
 requires-python = ">=3.14"
 readme = "README.md"
 license = "AGPL-3.0-or-later"
